@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/courses', [DemoController::class, 'index']);
+Route::get('/courses', [DemoController::class, 'index'])->name('course.index');
+Route::get('/courses/create', [DemoController::class, 'create'])->name('course.create');
+Route::post('/courses/create/save' , [DemoController::class, 'store'])->name('course.create.save');
 Route::get('/', function () {
     return view('welcome');
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\demo;
 use App\Http\Requests\StoredemoRequest;
 use App\Http\Requests\UpdatedemoRequest;
+use Illuminate\Http\Request;
 
 class DemoController extends Controller
 {
@@ -16,7 +17,9 @@ class DemoController extends Controller
     public function index()
     {
         $data = demo::query()->get();
-        return $data;
+        return view('demo.index',[
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -26,7 +29,7 @@ class DemoController extends Controller
      */
     public function create()
     {
-        //
+        return view('demo.create');
     }
 
     /**
@@ -35,9 +38,13 @@ class DemoController extends Controller
      * @param  \App\Http\Requests\StoredemoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoredemoRequest $request)
+    public function store(Request $request)
     {
-        //
+        $newData = new demo();
+
+        $newData->name = $request->get('name');
+        $newData->save();
+        return redirect()->route('course.index');
     }
 
     /**
