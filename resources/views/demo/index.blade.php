@@ -6,7 +6,9 @@
         <th>#</th>
         <th>name</th>
         <th>created</th>
-        <th>action</th>
+        <th>updated</th>
+        <th>Sửa</th>
+        <th>Xóa</th>
     </tr>
     @foreach ($data as $course)
         <tr>
@@ -17,16 +19,24 @@
                 {{ $course->name }}
             </th>
             <th>
-                {{ $course->created_at }}
+                {{ \Carbon\Carbon::parse($course->created_at)->format('d/m/Y') }}
             </th>
             <th>
-                <a href="">
-                    Xóa
-                </a>
-                <br>
-                <a href="">
+                {{ \Carbon\Carbon::parse($course->updated_at)->format('d/m/Y') }}
+            </th>
+            <th>
+                <a href="{{ route('course.edit', $course) }}">
                     Sửa
                 </a>
+            </th>
+            <th>
+                <form action="{{ route('course.delete', $course) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>
+                        xóa
+                    </button>
+                </form>
             </th>
         </tr>
     @endforeach

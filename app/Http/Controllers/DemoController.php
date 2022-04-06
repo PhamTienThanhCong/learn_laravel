@@ -66,7 +66,9 @@ class DemoController extends Controller
      */
     public function edit(demo $demo)
     {
-        //
+        return view('demo.edit', [
+            'demo' => $demo,
+        ]);
     }
 
     /**
@@ -76,9 +78,12 @@ class DemoController extends Controller
      * @param  \App\Models\demo  $demo
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatedemoRequest $request, demo $demo)
+    public function update(Request $request, demo $demo)
     {
-        //
+        $demo->name = $request->get('name');
+        $demo->save();
+        return redirect()->route('course.index');
+        // return $demo;
     }
 
     /**
@@ -89,6 +94,7 @@ class DemoController extends Controller
      */
     public function destroy(demo $demo)
     {
-        //
+        $demo->delete();
+        return redirect()->route('course.index');
     }
 }
