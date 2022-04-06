@@ -2,68 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Course\StoreRequest;
+use App\Http\Requests\Course\updateRequest;
 use App\Models\demo;
-use App\Http\Requests\StoredemoRequest;
-use App\Http\Requests\UpdatedemoRequest;
 use Illuminate\Http\Request;
 
 class DemoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-    //  * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        $data = demo::query()->get();
+        $search = $request->get('q');
+        $data = demo::query()
+            ->where('name', 'like', "%".$search."%")
+            ->paginate(3);
+
+        $data->appends(['q'=>$search]);
         return view('demo.index',[
             'data' => $data,
+            'search' => $search,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('demo.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoredemoRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $newData = new demo();
-
-        $newData->name = $request->get('name');
-        $newData->save();
+        demo::create($request->validated());
         return redirect()->route('course.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\demo  $demo
-     * @return \Illuminate\Http\Response
-     */
     public function show(demo $demo)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\demo  $demo
-     * @return \Illuminate\Http\Response
-     */
     public function edit(demo $demo)
     {
         return view('demo.edit', [
@@ -71,14 +47,7 @@ class DemoController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatedemoRequest  $request
-     * @param  \App\Models\demo  $demo
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, demo $demo)
+    public function update(updateRequest $request, demo $demo)
     {
         $demo->name = $request->get('name');
         $demo->save();
@@ -86,12 +55,6 @@ class DemoController extends Controller
         // return $demo;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\demo  $demo
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(demo $demo)
     {
         $demo->delete();

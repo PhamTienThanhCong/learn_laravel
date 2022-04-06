@@ -1,6 +1,10 @@
 <a href="{{ route('course.create') }}">
     Thêm
 </a>
+<form action="">
+    Tìm kiếm
+    <input type="text" name="q" value="{{ $search }}">
+</form>
 <table border="1" width="100%">
     <tr>
         <th>#</th>
@@ -41,3 +45,4 @@
         </tr>
     @endforeach
 </table>
+{{ $data->links() }}
